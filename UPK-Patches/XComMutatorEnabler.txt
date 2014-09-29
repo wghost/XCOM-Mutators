@@ -10,6 +10,12 @@ Compatible with XCOM Enemy Within versions:
 UPK_FILE=XComGame.upk
 
 [ADD_NAME_ENTRY]
+<%u 7>							// Length
+<%t "Mutate">					// Name
+<%u 0x00000000>					// flags L
+<%u 0x00070010>					// flags H
+
+[ADD_NAME_ENTRY]
 <%u 11>							// Length
 <%t "AddMutator">				// Name
 <%u 0x00000000>					// flags L

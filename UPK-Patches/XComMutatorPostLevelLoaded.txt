@@ -9,12 +9,6 @@ Compatible with XCOM Enemy Within versions:
 
 UPK_FILE=XComGame.upk
 
-[ADD_NAME_ENTRY]
-<%u 7>							// Length
-<%t "Mutate">					// Name
-<%u 0x00000000>					// flags L
-<%u 0x00070010>					// flags H
-
 OBJECT=XGBattle_SP.PostLevelLoaded:AUTO
 ALIAS=DebugLog:19 2E <Class.XComOnlineEventMgr> 19 2E <Engine.GameEngine> 12 20 <Engine.Engine> 0A 00 <Engine.Engine.GetEngine.ReturnValue> 00 1C <Engine.Engine.GetEngine> 16 09 00 <Engine.GameEngine.OnlineEventManager> 00 01 <Engine.GameEngine.OnlineEventManager> FF 00 <NullRef> 00 1B <DevOnlineMsg>
 [REPLACEMENT_CODE]
