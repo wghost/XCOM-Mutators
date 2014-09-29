@@ -1,0 +1,36 @@
+MOD_NAME=XCOM Mutator Post Load Save Game
+AUTHOR=wghost81 aka Wasteland Ghost
+DESCRIPTION=Inserts a Mutator call into XGBattle_SP.PostLoadSaveGame function, allows post-load modifications when loading from save
+
+Version: 1.0
+
+Compatible with XCOM Enemy Within versions:
+ - all
+
+UPK_FILE=XComGame.upk
+OBJECT=XGBattle_SP.PostLoadSaveGame:AUTO
+ALIAS=DebugLog:19 2E <Class.XComOnlineEventMgr> 19 2E <Engine.GameEngine> 12 20 <Engine.Engine> 0A 00 <Engine.Engine.GetEngine.ReturnValue> 00 1C <Engine.Engine.GetEngine> 16 09 00 <Engine.GameEngine.OnlineEventManager> 00 01 <Engine.GameEngine.OnlineEventManager> FF 00 <NullRef> 00 1B <DevOnlineMsg>
+[BEFORE_CODE]
+1B <InitCapturePoints> 16
+04 0B
+[AFTER_CODE]
+1B <InitCapturePoints> 16
+
+<!DebugLog> 1F <%t "XGBattle_SP.PostLoadSaveGame: Processing Mutators"> 16
+//if(class'Engine'.static.GetCurrentWorldInfo().Game.BaseMutator != none)
+07 13 06 77 19
+19 12 20 <Engine.Engine> 0A 00 <Engine.Engine.GetCurrentWorldInfo.ReturnValue> 00 1C <Engine.Engine.GetCurrentWorldInfo> 16 09 00 <Engine.WorldInfo.Game> 00 01 <Engine.WorldInfo.Game>
+09 00 <Engine.GameInfo.BaseMutator> 00 01 <Engine.GameInfo.BaseMutator>
+2A 16
+<!DebugLog> 1F <%t "XGBattle_SP.PostLoadSaveGame: Found BaseMutator"> 16
+//class'Engine'.static.GetCurrentWorldInfo().Game.BaseMutator.Mutate("XGBattle_SP.PostLoadSaveGame", class'Engine'.static.GetCurrentWorldInfo().GetALocalPlayerController());
+19 19
+19 12 20 <Engine.Engine> 0A 00 <Engine.Engine.GetCurrentWorldInfo.ReturnValue> 00 1C <Engine.Engine.GetCurrentWorldInfo> 16 09 00 <Engine.WorldInfo.Game> 00 01 <Engine.WorldInfo.Game>
+09 00 <Engine.GameInfo.BaseMutator> 00 01 <Engine.GameInfo.BaseMutator>
+0A 00 <NullRef> 00 1B <Mutate>
+1F <%t "XGBattle_SP.PostLoadSaveGame">
+19 12 20 <Engine.Engine> 0A 00 <Engine.Engine.GetCurrentWorldInfo.ReturnValue> 00 1C <Engine.Engine.GetCurrentWorldInfo> 16
+0A 00 <Engine.Actor.GetALocalPlayerController.ReturnValue> 00 1C <Engine.Actor.GetALocalPlayerController> 16
+16
+
+04 0B

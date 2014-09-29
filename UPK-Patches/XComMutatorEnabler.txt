@@ -1,0 +1,169 @@
+MOD_NAME=XCOM Mutator Enabler
+AUTHOR=wghost81 aka Wasteland Ghost
+DESCRIPTION=Allows to enable UE Mutators in XCOM through DefaultGame.ini
+
+Version: 1.0
+
+Compatible with XCOM Enemy Within versions:
+ - all
+
+UPK_FILE=XComGame.upk
+
+[ADD_NAME_ENTRY]
+<%u 11>							// Length
+<%t "AddMutator">				// Name
+<%u 0x00000000>					// flags L
+<%u 0x00070010>					// flags H
+
+[ADD_NAME_ENTRY]
+<%u 13>							// Length
+<%t "MutatorClass">				// Name
+<%u 0x00000000>					// flags L
+<%u 0x00070010>					// flags H
+
+[ADD_NAME_ENTRY]
+<%u 12>							// Length
+<%t "MutatorName">				// Name
+<%u 0x00000000>					// flags L
+<%u 0x00070010>					// flags H
+
+[ADD_NAME_ENTRY]
+<%u 13>							// Length
+<%t "MutatorNames">				// Name
+<%u 0x00000000>					// flags L
+<%u 0x00070010>					// flags H
+
+[ADD_EXPORT_ENTRY]
+<Core.ArrayProperty>			// Type
+<NullRef>						// ParentClassRef
+<Class.XComGameInfo>			// OwnerRef
+<MutatorNames>					// NameIdx
+<NullRef>						// ArchetypeRef
+<% u0x00000000>					// flags H
+<% u0x00070004>					// flags L
+<%u 44>							// serial size
+<%u 0>							// serial offset
+<%u 0>							// export flags
+<%u 0>							// net objects count
+<%u 0>							// GUID1
+<%u 0>							// GUID2
+<%u 0>							// GUID3
+<%u 0>							// GUID4
+<%u 0>							// unknown
+
+[ADD_EXPORT_ENTRY]
+<Core.StrProperty>				// Type
+<NullRef>						// ParentClassRef
+<XComGameInfo.MutatorNames>		// OwnerRef
+<MutatorNames>					// NameIdx
+<NullRef>						// ArchetypeRef
+<% u0x00000000>					// flags H
+<% u0x00070004>					// flags L
+<%u 40>							// serial size
+<%u 0>							// serial offset
+<%u 0>							// export flags
+<%u 0>							// net objects count
+<%u 0>							// GUID1
+<%u 0>							// GUID2
+<%u 0>							// GUID3
+<%u 0>							// GUID4
+<%u 0>							// unknown
+
+OBJECT=XComGameInfo.MutatorNames
+REL_OFFSET=16					// skip PrevObjRef + Empty DefaultProperties List + NextObjRef
+[MODDED_CODE]
+<%s 1>							// ArrayDim
+<%s 0>							// ElementSize
+<%u 0x00404000>					// flags L: Config + NeedCtorLink
+<%u 0x00000000>					// flags H
+<None>							// CategoryIndex
+<NullRef>						// ArrayEnumRef
+<XComGameInfo.MutatorNames.MutatorNames>	// InnerObjRef
+
+OBJECT=XComGameInfo.MutatorNames.MutatorNames
+REL_OFFSET=16					// skip PrevObjRef + Empty DefaultProperties List + NextObjRef
+[MODDED_CODE]
+<%s 1>							// ArrayDim
+<%s 0>							// ElementSize
+<%u 0x00404000>					// flags L: Config + NeedCtorLink
+<%u 0x00000000>					// flags H
+<None>							// CategoryIndex
+<NullRef>						// ArrayEnumRef
+
+[ADD_EXPORT_ENTRY]
+<Core.ClassProperty>			// Type
+<NullRef>						// ParentClassRef
+<XComGameInfo.InitGame>			// OwnerRef
+<MutatorClass>					// NameIdx
+<NullRef>						// ArchetypeRef
+<% u0x00000000>					// flags H
+<% u0x00070004>					// flags L
+<%u 48>							// serial size
+<%u 0>							// serial offset
+<%u 0>							// export flags
+<%u 0>							// net objects count
+<%u 0>							// GUID1
+<%u 0>							// GUID2
+<%u 0>							// GUID3
+<%u 0>							// GUID4
+<%u 0>							// unknown
+
+OBJECT=XComGameInfo.InitGame.MutatorClass
+REL_OFFSET=16					// skip PrevObjRef + Empty DefaultProperties List + NextObjRef
+[MODDED_CODE]
+<%s 1>							// ArrayDim
+<%s 0>							// ElementSize
+<%u 0x00000000>					// flags L
+<%u 0x00000000>					// flags H
+<None>							// CategoryIndex
+<NullRef>						// ArrayEnumRef
+<Core.Class>					// OtherObjRef
+<Engine.Mutator>				// ClassObjRef
+
+[ADD_EXPORT_ENTRY]
+<Core.StrProperty>				// Type
+<NullRef>						// ParentClassRef
+<XComGameInfo.InitGame>			// OwnerRef
+<MutatorName>					// NameIdx
+<NullRef>						// ArchetypeRef
+<% u0x00000000>					// flags H
+<% u0x00070004>					// flags L
+<%u 40>							// serial size
+<%u 0>							// serial offset
+<%u 0>							// export flags
+<%u 0>							// net objects count
+<%u 0>							// GUID1
+<%u 0>							// GUID2
+<%u 0>							// GUID3
+<%u 0>							// GUID4
+<%u 0>							// unknown
+
+OBJECT=XComGameInfo.InitGame.MutatorName
+REL_OFFSET=16					// skip PrevObjRef + Empty DefaultProperties List + NextObjRef
+[MODDED_CODE]
+<%s 1>							// ArrayDim
+<%s 0>							// ElementSize
+<%u 0x00400000>					// flags L: NeedCtorLink
+<%u 0x00000000>					// flags H
+<None>							// CategoryIndex
+<NullRef>						// ArrayEnumRef
+
+OBJECT=XComGameInfo.InitGame:AUTO
+[BEFORE_CODE]
+//CacheMods()
+1B <CacheMods> 16
+[AFTER_CODE]
+//foreach MutatorNames(MutatorName)
+58 01 <@MutatorNames> 00 <.MutatorName> 00 4A [@IP]
+//MutatorClass = class<Mutator>(DynamicLoadObject(MutatorName, class'Class'))
+0F 00 <.MutatorClass> 13 <Engine.Mutator> 1C <Core.Object.DynamicLoadObject> 00 <.MutatorName> 20 <Core.Class> 4A 16
+//if(MutatorClass != none)
+07 [@IN] 77 00 <.MutatorClass> 2A 16
+//AddMutator(MutatorName, true)
+1B <AddMutator> 00 <.MutatorName> 27 16
+[#IN]
+31
+[#IP]
+30
+//CacheMods()
+1B <CacheMods> 16

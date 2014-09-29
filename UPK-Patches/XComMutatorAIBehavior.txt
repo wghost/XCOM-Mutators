@@ -1,0 +1,68 @@
+MOD_NAME=XCOM Mutator AI Behavior
+AUTHOR=wghost81 aka Wasteland Ghost
+DESCRIPTION=Inserts a Mutator call into XGPlayer.InitBehavior function, allows to replace AIBehavior classes
+
+Version: 1.0
+
+Compatible with XCOM Enemy Within versions:
+ - all
+
+UPK_FILE=XComGame.upk
+
+OBJECT=XGPlayer.InitBehavior:AUTO
+ALIAS=DebugLog:19 2E <Class.XComOnlineEventMgr> 19 2E <Engine.GameEngine> 12 20 <Engine.Engine> 0A 00 <Engine.Engine.GetEngine.ReturnValue> 00 1C <Engine.Engine.GetEngine> 16 09 00 <Engine.GameEngine.OnlineEventManager> 00 01 <Engine.GameEngine.OnlineEventManager> FF 00 <NullRef> 00 1B <DevOnlineMsg>
+[REPLACEMENT_CODE]
+//if(kUnit.m_kBehavior == none)
+07 [@LoadInit] 72 19 00 <.kUnit> 09 00 <XGUnitNativeBase.m_kBehavior> 00 01 <XGUnitNativeBase.m_kBehavior> 2A 16
+
+<!DebugLog> 1F <%t "XGPlayer.InitBehavior: Processing Mutators"> 16
+//if(class'Engine'.static.GetCurrentWorldInfo().Game.BaseMutator != none)
+07 [@NoMutators] 77 19
+19 12 20 <Engine.Engine> 0A 00 <Engine.Engine.GetCurrentWorldInfo.ReturnValue> 00 1C <Engine.Engine.GetCurrentWorldInfo> 16 09 00 <Engine.WorldInfo.Game> 00 01 <Engine.WorldInfo.Game>
+09 00 <Engine.GameInfo.BaseMutator> 00 01 <Engine.GameInfo.BaseMutator>
+2A 16
+<!DebugLog> 1F <%t "XGPlayer.InitBehavior: Found BaseMutator"> 16
+//class'Engine'.static.GetCurrentWorldInfo().Game.BaseMutator.Mutate("XGPlayer.InitBehavior", class'Engine'.static.GetCurrentWorldInfo().GetALocalPlayerController());
+19 19
+19 12 20 <Engine.Engine> 0A 00 <Engine.Engine.GetCurrentWorldInfo.ReturnValue> 00 1C <Engine.Engine.GetCurrentWorldInfo> 16 09 00 <Engine.WorldInfo.Game> 00 01 <Engine.WorldInfo.Game>
+09 00 <Engine.GameInfo.BaseMutator> 00 01 <Engine.GameInfo.BaseMutator>
+0A 00 <NullRef> 00 1B <Mutate>
+70
+1F <%t "XGPlayer.InitBehavior:">
+38 56 00 <.kUnit>
+16
+19 12 20 <Engine.Engine> 0A 00 <Engine.Engine.GetCurrentWorldInfo.ReturnValue> 00 1C <Engine.Engine.GetCurrentWorldInfo> 16
+0A 00 <Engine.Actor.GetALocalPlayerController.ReturnValue> 00 1C <Engine.Actor.GetALocalPlayerController> 16
+16
+[#NoMutators]
+
+//if(kUnit.m_kBehavior == none)
+07 [@NormalSpawn] 72 19 00 <.kUnit> 09 00 <XGUnitNativeBase.m_kBehavior> 00 01 <XGUnitNativeBase.m_kBehavior> 2A 16
+
+//kUnit.m_kBehavior = Spawn(GetBehaviorClass(kUnit.GetCharacter().m_eType))
+0F 19 00 <.kUnit> 09 00 <XGUnitNativeBase.m_kBehavior> 00 01 <XGUnitNativeBase.m_kBehavior>
+1C <Engine.Actor.Spawn> 1B <GetBehaviorClass> 19 19 00 <.kUnit> 0A 00 <XGUnit.GetCharacter.ReturnValue> 00 1B <GetCharacter> 16 09 00 <XGCharacter.m_eType> 00 01 <XGCharacter.m_eType> 16 4A 4A 4A 4A 4A 4A 4A 16
+
+[#NormalSpawn]
+
+//kUnit.m_kBehavior.Init(kUnit)
+19 19 00 <.kUnit> 09 00 <XGUnitNativeBase.m_kBehavior> 00 01 <XGUnitNativeBase.m_kBehavior> 13 00 <NullRef> 00 1B <Init> 00 <.kUnit> 16
+
+//kUnit.m_kBehavior.SetBehavior(none)
+19 19 00 <.kUnit> 09 00 <XGUnitNativeBase.m_kBehavior> 00 01 <XGUnitNativeBase.m_kBehavior> 13 00 <NullRef> 00 1B <SetBehavior> 2A 16
+
+//goto return
+06 [@Return]
+
+[#LoadInit]
+
+//kUnit.m_kBehavior.LoadInit(kUnit)
+19 19 00 <.kUnit> 09 00 <XGUnitNativeBase.m_kBehavior> 00 01 <XGUnitNativeBase.m_kBehavior> 13 00 <NullRef> 00 1B <LoadInit> 00 <.kUnit> 16
+
+[#Return]
+
+//return
+04 0B
+
+//EOS
+53

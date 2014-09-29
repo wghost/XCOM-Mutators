@@ -1,0 +1,99 @@
+MOD_NAME=XCOM Mutator Spawn Alien
+AUTHOR=wghost81 aka Wasteland Ghost
+DESCRIPTION=Inserts a Mutator call into SeqAct_SpawnAlien.Activated function, allows to interrupt dynamic alien spawn process
+
+Version: 1.0
+
+Compatible with XCOM Enemy Within versions:
+ - all
+
+UPK_FILE=XComGame.upk
+
+OBJECT=SeqAct_SpawnAlien.Activated:AUTO
+ALIAS=DebugLog:19 2E <Class.XComOnlineEventMgr> 19 2E <Engine.GameEngine> 12 20 <Engine.Engine> 0A 00 <Engine.Engine.GetEngine.ReturnValue> 00 1C <Engine.Engine.GetEngine> 16 09 00 <Engine.GameEngine.OnlineEventManager> 00 01 <Engine.GameEngine.OnlineEventManager> FF 00 <NullRef> 00 1B <DevOnlineMsg>
+[REPLACEMENT_CODE]
+//if(!bEnabled)
+07 [@Enabled] 81 2D 01 <@bEnabled> 16
+//return
+04 0B
+
+[#Enabled]
+
+<!DebugLog> 1F <%t "SeqAct_SpawnAlien.Activated: Processing Mutators"> 16
+//if(class'Engine'.static.GetCurrentWorldInfo().Game.BaseMutator != none)
+07 [@NoMutators] 77 19
+19 12 20 <Engine.Engine> 0A 00 <Engine.Engine.GetCurrentWorldInfo.ReturnValue> 00 1C <Engine.Engine.GetCurrentWorldInfo> 16 09 00 <Engine.WorldInfo.Game> 00 01 <Engine.WorldInfo.Game>
+09 00 <Engine.GameInfo.BaseMutator> 00 01 <Engine.GameInfo.BaseMutator>
+2A 16
+<!DebugLog> 1F <%t "SeqAct_SpawnAlien.Activated: Found BaseMutator"> 16
+//class'Engine'.static.GetCurrentWorldInfo().Game.BaseMutator.Mutate("SeqAct_SpawnAlien.Activated", class'Engine'.static.GetCurrentWorldInfo().GetALocalPlayerController());
+19 19
+19 12 20 <Engine.Engine> 0A 00 <Engine.Engine.GetCurrentWorldInfo.ReturnValue> 00 1C <Engine.Engine.GetCurrentWorldInfo> 16 09 00 <Engine.WorldInfo.Game> 00 01 <Engine.WorldInfo.Game>
+09 00 <Engine.GameInfo.BaseMutator> 00 01 <Engine.GameInfo.BaseMutator>
+0A 00 <NullRef> 00 1B <Mutate>
+70
+1F <%t "SeqAct_SpawnAlien.Activated:">
+38 57 01 <Core.Object.Name>
+16
+19 12 20 <Engine.Engine> 0A 00 <Engine.Engine.GetCurrentWorldInfo.ReturnValue> 00 1C <Engine.Engine.GetCurrentWorldInfo> 16
+0A 00 <Engine.Actor.GetALocalPlayerController.ReturnValue> 00 1C <Engine.Actor.GetALocalPlayerController> 16
+16
+[#NoMutators]
+
+//if (!OutputLinks[0].bHasImpulse)
+07 [@Mutated] 81 2D 35 <Engine.SequenceOp.SeqOpOutputLink.bHasImpulse> <Engine.SequenceOp.SeqOpOutputLink> 00 01 10 25 01 <Engine.SequenceOp.OutputLinks> 16
+
+//SpawnedUnit = none
+0F 01 <@SpawnedUnit> 2A
+
+//OutputLinks[1].bHasImpulse = false
+14 2D 35 <Engine.SequenceOp.SeqOpOutputLink.bHasImpulse> <Engine.SequenceOp.SeqOpOutputLink> 00 01 10 26 01 <Engine.SequenceOp.OutputLinks> 28
+
+//m_kDropIn = new class'XGAISpawnMethod_DropIn'
+0F 01 <@m_kDropIn> 11 0B 0B 0B 20 <Class.XGAISpawnMethod_DropIn> 0B
+
+//m_kDropIn.InitDropIn(iDropHeight, bUseOverwatch, bTriggerOverwatch, bPlaySound, bRevealSpawn, bSpawnImmediately, ForceAlienType, kAdditionalSound, self)
+19 01 <@m_kDropIn> 59 00 <NullRef> 00 1B <InitDropIn> 01 <@iDropHeight> 2D 01 <@bUseOverwatch> 2D 01 <@bTriggerOverwatch> 2D 01 <@bPlaySound> 2D 01 <@bRevealSpawn> 2D 01 <@bSpawnImmediately> 01 <@ForceAlienType> 01 <@kAdditionalSound> 17 4A 16
+
+//foreach LinkedVariables(class'SeqVar_Object', SpawnObj, "SpawnPoints")
+2F 1C <Engine.SequenceOp.LinkedVariables> 20 <Engine.SeqVar_Object> 00 <.SpawnObj> 1F <%t "SpawnPoints"> 16 [@IP]
+
+//ThisObj = Actor(SpawnObj.GetObjectValue())
+0F 00 <.ThisObj> 2E <Engine.Actor> 19 00 <.SpawnObj> 0A 00 <Engine.SeqVar_Object.GetObjectValue.ReturnValue> 00 1B <GetObjectValue> 16
+
+//SpawnPt = XComSpawnPoint_Alien(ThisObj)
+0F 00 <.SpawnPt> 2E <Class.XComSpawnPoint_Alien> 00 <.ThisObj>
+
+//if(SpawnPt != none)
+07 [@IN] 77 00 <.SpawnPt> 2A 16
+
+//m_kDropIn.AddSpawnPoint(SpawnPt)
+19 01 <@m_kDropIn> 14 00 <NullRef> 00 1B <AddSpawnPoint> 00 <.SpawnPt> 4A 16
+
+[#IN]
+31
+	
+[#IP]
+30
+	
+//if(bSpawnImmediately)
+07 [@NoSpawn] 2D 01 <@bSpawnImmediately>
+
+//m_kDropIn.CheckContentLoaded()
+19 01 <@m_kDropIn> 0A 00 <NullRef> 00 1B <CheckContentLoaded> 16
+
+[#NoSpawn]
+
+//OutputLinks[0].bHasImpulse = true
+14 2D 35 <Engine.SequenceOp.SeqOpOutputLink.bHasImpulse> <Engine.SequenceOp.SeqOpOutputLink> 00 01 10 25 01 <Engine.SequenceOp.OutputLinks> 27
+
+//ActivateOutputLink(0)
+1C <Engine.SequenceOp.ActivateOutputLink> 25 16
+
+[#Mutated]
+
+//return
+04 0B
+
+//EOS
+53
