@@ -1,0 +1,5 @@
+[Engine.ScriptPackages]
++NativePackages=XComGame
++NativePackages=XComStrategyGame
++NonNativePackages=XComUIShell
++NonNativePackages=XComMutator

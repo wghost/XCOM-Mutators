@@ -1,0 +1,5 @@
+[XComStrategyGame.XComHeadquartersGame]
++MutatorNames=XComMutator.MyMutator
+
+[XComGame.XComTacticalGame]
++MutatorNames=XComMutator.MyMutator
