@@ -11,6 +11,7 @@ requires patching main packages (Engine, XComGame, XComStrategyGame) to insert M
 appropriate places.
 
 Matching UDK version: http://www.nexusmods.com/xcom/mods/485
+
 Nexus Forums topic: http://forums.nexusmods.com/index.php?/topic/2076399-scripting-with-udk/
 
 All trademarks, mentioned herein, are the property of their respective owners.
