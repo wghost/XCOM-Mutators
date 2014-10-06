@@ -1,0 +1,92 @@
+MOD_NAME=XCOM Mutator StrategyAI
+AUTHOR=wghost81 aka Wasteland Ghost
+DESCRIPTION=Inserts a Mutator call into XGStrategy.NewGame function, allows to replace StrategyAI class
+
+Version: 1.0
+
+Compatible with XCOM Enemy Within versions:
+ - all
+
+UPK_FILE=XComStrategyGame.upk
+
+[ADD_NAME_ENTRY]
+<%u 7>							// Length
+<%t "Mutate">					// Name
+<%u 0x00000000>					// flags L
+<%u 0x00070010>					// flags H
+
+OBJECT=XGStrategy.NewGame:AUTO
+[REPLACEMENT_CODE]
+//if(class'Engine'.static.GetCurrentWorldInfo().Game.BaseMutator != none)
+07 [@NoMutators] 77 19
+19 12 20 <Engine.Engine> 0A 00 <Engine.Engine.GetCurrentWorldInfo.ReturnValue> 00 1C <Engine.Engine.GetCurrentWorldInfo> 16 09 00 <Engine.WorldInfo.Game> 00 01 <Engine.WorldInfo.Game>
+09 00 <Engine.GameInfo.BaseMutator> 00 01 <Engine.GameInfo.BaseMutator>
+2A 16
+//class'Engine'.static.GetCurrentWorldInfo().Game.BaseMutator.Mutate("XGStrategy.NewGame", class'Engine'.static.GetCurrentWorldInfo().GetALocalPlayerController());
+19 19
+19 12 20 <Engine.Engine> 0A 00 <Engine.Engine.GetCurrentWorldInfo.ReturnValue> 00 1C <Engine.Engine.GetCurrentWorldInfo> 16 09 00 <Engine.WorldInfo.Game> 00 01 <Engine.WorldInfo.Game>
+09 00 <Engine.GameInfo.BaseMutator> 00 01 <Engine.GameInfo.BaseMutator>
+0A 00 <NullRef> 00 1B <Mutate>
+1F <%t "XGStrategy.NewGame">
+19 12 20 <Engine.Engine> 0A 00 <Engine.Engine.GetCurrentWorldInfo.ReturnValue> 00 1C <Engine.Engine.GetCurrentWorldInfo> 16
+0A 00 <Engine.Actor.GetALocalPlayerController.ReturnValue> 00 1C <Engine.Actor.GetALocalPlayerController> 16
+16
+[#NoMutators]
+	
+//if (m_kWorld == None) // if not created by mutator
+07 [@WorldSpawned] 72 01 <@m_kWorld> 2A 16
+//m_kWorld = Spawn(class'XGWorld')
+0F 01 <@m_kWorld> 1C <Engine.Actor.Spawn> 20 <Class.XGWorld> 4A 4A 4A 4A 4A 4A 4A 16
+[#WorldSpawned]
+//if (m_kGeoscape == None) // if not created by mutator
+07 [@GeoscapeSpawned] 72 01 <@m_kGeoscape> 2A 16
+//m_kGeoscape = Spawn(class'XGGeoscape')
+0F 01 <@m_kGeoscape> 1C <Engine.Actor.Spawn> 20 <Class.XGGeoscape> 4A 4A 4A 4A 4A 4A 4A 16
+[#GeoscapeSpawned]
+//if (m_kHQ == None) // if not created by mutator
+07 [@HQSpawned] 72 01 <@m_kHQ> 2A 16
+//m_kHQ = Spawn(class'XGHeadQuarters')
+0F 01 <@m_kHQ> 1C <Engine.Actor.Spawn> 20 <Class.XGHeadQuarters> 4A 4A 4A 4A 4A 4A 4A 16
+[#HQSpawned]
+//if (m_kAI == None) // if not created by mutator
+07 [@AISpawned] 72 01 <@m_kAI> 2A 16
+//m_kAI = Spawn(class'XGStrategyAI')
+0F 01 <@m_kAI> 1C <Engine.Actor.Spawn> 20 <Class.XGStrategyAI> 4A 4A 4A 4A 4A 4A 4A 16
+[#AISpawned]
+//m_kRecapSaveData = Spawn(class'XGRecapSaveData')
+0F 01 <@m_kRecapSaveData> 1C <Engine.Actor.Spawn> 20 <XComGame.XGRecapSaveData> 4A 4A 4A 4A 4A 4A 4A 16
+//if (m_kExaltSimulation == None) // if not created by mutator
+07 [@EXALTSpawned] 72 01 <@m_kExaltSimulation> 2A 16
+//m_kExaltSimulation = Spawn(class'XGExaltSimulation')
+0F 01 <@m_kExaltSimulation> 1C <Engine.Actor.Spawn> 20 <Class.XGExaltSimulation> 4A 4A 4A 4A 4A 4A 4A 16
+[#EXALTSpawned]
+//m_arrMissionTotals.Add(22)
+54 01 <@m_arrMissionTotals> 2C 16 16
+//if (m_kNarrative == None) // if not created by mutator
+07 [@NarrativeSpawned] 72 01 <@m_kNarrative> 2A 16
+//m_kNarrative = Spawn(class'XGNarrative')
+0F 01 <@m_kNarrative> 1C <Engine.Actor.Spawn> 20 <XComGame.XGNarrative> 4A 4A 4A 4A 4A 4A 4A 16
+//m_kNarrative.InitNarrative(XComHeadquartersGame(WorldInfo.Game).m_bSuppressFirstTimeNarrative)
+19 01 <@m_kNarrative> 47 00 <NullRef> 00 1B <InitNarrative>
+19 2E <Class.XComHeadquartersGame>
+19 01 <Engine.Actor.WorldInfo> 09 00 <Engine.WorldInfo.Game> 00 01 <Engine.WorldInfo.Game>
+0A 00 <XComHeadquartersGame.m_bSuppressFirstTimeNarrative> 00 2D 01 <XComHeadquartersGame.m_bSuppressFirstTimeNarrative> 16
+[#NarrativeSpawned]
+//m_arrItemUnlocks.Add(226)
+54 01 <@m_arrItemUnlocks> 2C E2 16
+//m_arrGeneModUnlocks.Add(11)
+54 01 <@m_arrGeneModUnlocks> 2C 0B 16
+//m_arrFacilityUnlocks.Add(24)
+54 01 <@m_arrFacilityUnlocks> 2C 18 16
+//m_arrFoundryUnlocks.Add(25)
+54 01 <@m_arrFoundryUnlocks> 2C 19 16
+//m_arrSecondWave.Add(21)
+54 01 <@m_arrSecondWave> 2C 15 16
+//Init(false)
+1B <Init> 28 16
+//GotoState('Initing')
+71 21 <Initing> 4A 4A 4A 16
+//return
+04 0B
+//EOS
+53

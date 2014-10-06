@@ -14,6 +14,10 @@ function Mutate(string MutateString, PlayerController Sender)
 	{
 		MutateNotifyKismetOfLoad(Sender);
 	}
+	if (MutateString == "XGStrategy.NewGame")
+	{
+		MutateStrategyAI(Sender);
+	}
 	if (InStr(MutateString, "SeqAct_SpawnAlien.Activated") > -1)
 	{
 		MutateSpawnAlien(Split(MutateString, "SeqAct_SpawnAlien.Activated:", true), Sender);
@@ -40,6 +44,12 @@ function PostLoadSaveGame(PlayerController Sender)
 }
 
 function MutateNotifyKismetOfLoad(PlayerController Sender)
+{
+	// never call for NextMutator from inside a function, called by Mutate!
+	// if you do, you'll end up calling the same function twice
+}
+
+function MutateStrategyAI(PlayerController Sender)
 {
 	// never call for NextMutator from inside a function, called by Mutate!
 	// if you do, you'll end up calling the same function twice
