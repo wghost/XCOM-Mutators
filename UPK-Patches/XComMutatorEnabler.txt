@@ -1,175 +1,330 @@
-MOD_NAME=XCOM Mutator Enabler
-AUTHOR=wghost81 aka Wasteland Ghost
-DESCRIPTION=Allows to enable UE Mutators in XCOM through DefaultGame.ini
-
-Version: 1.0
-
-Compatible with XCOM Enemy Within versions:
- - all
-
 UPK_FILE=XComGame.upk
 
-[ADD_NAME_ENTRY]
-<%u 7>							// Length
-<%t "Mutate">					// Name
-<%u 0x00000000>					// flags L
-<%u 0x00070010>					// flags H
+//allow Mutator data to be saved on tactical level
+OBJECT=Default__Checkpoint_TacticalGame
+FIND_CODE=<Class.XGLoadoutInstances>:END
+MODDED_CODE=<Engine.Mutator>
 
+//add "AddMutator" function name to name table
 [ADD_NAME_ENTRY]
 <%u 11>							// Length
 <%t "AddMutator">				// Name
 <%u 0x00000000>					// flags L
 <%u 0x00070010>					// flags H
 
+//add "Mutate" function name to name table
 [ADD_NAME_ENTRY]
-<%u 13>							// Length
-<%t "MutatorClass">				// Name
+<%u 7>							// Length
+<%t "Mutate">					// Name
 <%u 0x00000000>					// flags L
 <%u 0x00070010>					// flags H
 
-[ADD_NAME_ENTRY]
-<%u 12>							// Length
-<%t "MutatorName">				// Name
-<%u 0x00000000>					// flags L
-<%u 0x00070010>					// flags H
-
-[ADD_NAME_ENTRY]
-<%u 13>							// Length
-<%t "MutatorNames">				// Name
-<%u 0x00000000>					// flags L
-<%u 0x00070010>					// flags H
-
-[ADD_EXPORT_ENTRY]
-<Core.ArrayProperty>			// Type
-<NullRef>						// ParentClassRef
-<Class.XComGameInfo>			// OwnerRef
-<MutatorNames>					// NameIdx
-<NullRef>						// ArchetypeRef
-<% u0x00000000>					// flags H
-<% u0x00070004>					// flags L
-<%u 44>							// serial size
-<%u 0>							// serial offset
-<%u 0>							// export flags
-<%u 0>							// net objects count
-<%u 0>							// GUID1
-<%u 0>							// GUID2
-<%u 0>							// GUID3
-<%u 0>							// GUID4
-<%u 0>							// unknown
-
-[ADD_EXPORT_ENTRY]
-<Core.StrProperty>				// Type
-<NullRef>						// ParentClassRef
-<XComGameInfo.MutatorNames>		// OwnerRef
-<MutatorNames>					// NameIdx
-<NullRef>						// ArchetypeRef
-<% u0x00000000>					// flags H
-<% u0x00070004>					// flags L
-<%u 40>							// serial size
-<%u 0>							// serial offset
-<%u 0>							// export flags
-<%u 0>							// net objects count
-<%u 0>							// GUID1
-<%u 0>							// GUID2
-<%u 0>							// GUID3
-<%u 0>							// GUID4
-<%u 0>							// unknown
-
-OBJECT=XComGameInfo.MutatorNames
-REL_OFFSET=16					// skip PrevObjRef + Empty DefaultProperties List + NextObjRef
-[MODDED_CODE]
-<%s 1>							// ArrayDim
-<%s 0>							// ElementSize
-<%u 0x00404000>					// flags L: Config + NeedCtorLink
-<%u 0x00000000>					// flags H
-<None>							// CategoryIndex
-<NullRef>						// ArrayEnumRef
-<XComGameInfo.MutatorNames.MutatorNames>	// InnerObjRef
-
-OBJECT=XComGameInfo.MutatorNames.MutatorNames
-REL_OFFSET=16					// skip PrevObjRef + Empty DefaultProperties List + NextObjRef
-[MODDED_CODE]
-<%s 1>							// ArrayDim
-<%s 0>							// ElementSize
-<%u 0x00404000>					// flags L: Config + NeedCtorLink
-<%u 0x00000000>					// flags H
-<None>							// CategoryIndex
-<NullRef>						// ArrayEnumRef
-
-[ADD_EXPORT_ENTRY]
-<Core.ClassProperty>			// Type
-<NullRef>						// ParentClassRef
-<XComGameInfo.InitGame>			// OwnerRef
-<MutatorClass>					// NameIdx
-<NullRef>						// ArchetypeRef
-<% u0x00000000>					// flags H
-<% u0x00070004>					// flags L
-<%u 48>							// serial size
-<%u 0>							// serial offset
-<%u 0>							// export flags
-<%u 0>							// net objects count
-<%u 0>							// GUID1
-<%u 0>							// GUID2
-<%u 0>							// GUID3
-<%u 0>							// GUID4
-<%u 0>							// unknown
-
-OBJECT=XComGameInfo.InitGame.MutatorClass
-REL_OFFSET=16					// skip PrevObjRef + Empty DefaultProperties List + NextObjRef
-[MODDED_CODE]
-<%s 1>							// ArrayDim
-<%s 0>							// ElementSize
-<%u 0x00000000>					// flags L
-<%u 0x00000000>					// flags H
-<None>							// CategoryIndex
-<NullRef>						// ArrayEnumRef
-<Core.Class>					// OtherObjRef
-<Engine.Mutator>				// ClassObjRef
-
-[ADD_EXPORT_ENTRY]
-<Core.StrProperty>				// Type
-<NullRef>						// ParentClassRef
-<XComGameInfo.InitGame>			// OwnerRef
-<MutatorName>					// NameIdx
-<NullRef>						// ArchetypeRef
-<% u0x00000000>					// flags H
-<% u0x00070004>					// flags L
-<%u 40>							// serial size
-<%u 0>							// serial offset
-<%u 0>							// export flags
-<%u 0>							// net objects count
-<%u 0>							// GUID1
-<%u 0>							// GUID2
-<%u 0>							// GUID3
-<%u 0>							// GUID4
-<%u 0>							// unknown
-
-OBJECT=XComGameInfo.InitGame.MutatorName
-REL_OFFSET=16					// skip PrevObjRef + Empty DefaultProperties List + NextObjRef
-[MODDED_CODE]
-<%s 1>							// ArrayDim
-<%s 0>							// ElementSize
-<%u 0x00400000>					// flags L: NeedCtorLink
-<%u 0x00000000>					// flags H
-<None>							// CategoryIndex
-<NullRef>						// ArrayEnumRef
-
+//load base mutator
 OBJECT=XComGameInfo.InitGame:AUTO
 [BEFORE_CODE]
 //CacheMods()
 1B <CacheMods> 16
 [AFTER_CODE]
-//foreach MutatorNames(MutatorName)
-58 01 <@MutatorNames> 00 <.MutatorName> 00 4A [@IP]
-//MutatorClass = class<Mutator>(DynamicLoadObject(MutatorName, class'Class'))
-0F 00 <.MutatorClass> 13 <Engine.Mutator> 1C <Core.Object.DynamicLoadObject> 00 <.MutatorName> 20 <Core.Class> 4A 16
-//if(MutatorClass != none)
-07 [@IN] 77 00 <.MutatorClass> 2A 16
-//AddMutator(MutatorName, true)
-1B <AddMutator> 00 <.MutatorName> 27 16
+//AddMutator("XComMutator.XComMutatorLoader", true)
+1B <AddMutator> 1F <%t "XComMutator.XComMutatorLoader"> 27 16
+//if(BaseMutator != none)
+07 [@label1] 77 01 <Engine.GameInfo.BaseMutator> 2A 16
+//BaseMutator.Mutate("XComGameInfo.InitGame", GetALocalPlayerController());
+19 01 <Engine.GameInfo.BaseMutator> 0A 00 <NullRef> 00 1B <Mutate>
+1F <%t "XComGameInfo.InitGame"> 1C <Engine.Actor.GetALocalPlayerController> 16 16
+[#label1]
+//CacheMods()
+1B <CacheMods> 16
+
+//post level loaded mutator (tactical layer)
+OBJECT=XGBattle_SP.PostLevelLoaded:AUTO
+[REPLACEMENT_CODE]
+//super.PostLevelLoaded()
+1C <XGBattle.PostLevelLoaded> 16
+//if(class'Engine'.static.GetCurrentWorldInfo().Game.BaseMutator != none)
+07 [@label1] 77 19
+19 12 20 <Engine.Engine> 0A 00 <Engine.Engine.GetCurrentWorldInfo.ReturnValue> 00 1C <Engine.Engine.GetCurrentWorldInfo> 16 09 00 <Engine.WorldInfo.Game> 00 01 <Engine.WorldInfo.Game>
+09 00 <Engine.GameInfo.BaseMutator> 00 01 <Engine.GameInfo.BaseMutator>
+2A 16
+//class'Engine'.static.GetCurrentWorldInfo().Game.BaseMutator.Mutate("XGBattle_SP.PostLevelLoaded", WorldInfo.GetALocalPlayerController());
+19 19
+19 12 20 <Engine.Engine> 0A 00 <Engine.Engine.GetCurrentWorldInfo.ReturnValue> 00 1C <Engine.Engine.GetCurrentWorldInfo> 16 09 00 <Engine.WorldInfo.Game> 00 01 <Engine.WorldInfo.Game>
+09 00 <Engine.GameInfo.BaseMutator> 00 01 <Engine.GameInfo.BaseMutator>
+0A 00 <NullRef> 00 1B <Mutate>
+1F <%t "XGBattle_SP.PostLevelLoaded">
+19 01 <Engine.Actor.WorldInfo> 0A 00 <Engine.Actor.GetALocalPlayerController.ReturnValue> 00 1C <Engine.Actor.GetALocalPlayerController> 16
+16
+[#label1]
+//if(Desc().ShouldSpawnMeldCanisters())
+07 [@NoMeld] 19 1B <Desc> 16 0A 00 <XGBattleDesc.ShouldSpawnMeldCanisters.ReturnValue> 00 1B <ShouldSpawnMeldCanisters> 16
+//InitMeldContainers()
+1B <InitMeldContainers> 16
+[#NoMeld]
+//InitCapturePoints()
+1B <InitCapturePoints> 16
+//return
+04 0B
+//EOS
+53
+
+//post load save mutator (tactical layer)
+OBJECT=XGBattle_SP.PostLoadSaveGame:AUTO
+[BEFORE_CODE]
+1B <InitCapturePoints> 16
+04 0B
+[AFTER_CODE]
+1B <InitCapturePoints> 16
+//if(class'Engine'.static.GetCurrentWorldInfo().Game.BaseMutator != none)
+07 13 06 77 19
+19 12 20 <Engine.Engine> 0A 00 <Engine.Engine.GetCurrentWorldInfo.ReturnValue> 00 1C <Engine.Engine.GetCurrentWorldInfo> 16 09 00 <Engine.WorldInfo.Game> 00 01 <Engine.WorldInfo.Game>
+09 00 <Engine.GameInfo.BaseMutator> 00 01 <Engine.GameInfo.BaseMutator>
+2A 16
+//class'Engine'.static.GetCurrentWorldInfo().Game.BaseMutator.Mutate("XGBattle_SP.PostLoadSaveGame", class'Engine'.static.GetCurrentWorldInfo().GetALocalPlayerController());
+19 19
+19 12 20 <Engine.Engine> 0A 00 <Engine.Engine.GetCurrentWorldInfo.ReturnValue> 00 1C <Engine.Engine.GetCurrentWorldInfo> 16 09 00 <Engine.WorldInfo.Game> 00 01 <Engine.WorldInfo.Game>
+09 00 <Engine.GameInfo.BaseMutator> 00 01 <Engine.GameInfo.BaseMutator>
+0A 00 <NullRef> 00 1B <Mutate>
+1F <%t "XGBattle_SP.PostLoadSaveGame">
+19 12 20 <Engine.Engine> 0A 00 <Engine.Engine.GetCurrentWorldInfo.ReturnValue> 00 1C <Engine.Engine.GetCurrentWorldInfo> 16
+0A 00 <Engine.Actor.GetALocalPlayerController.ReturnValue> 00 1C <Engine.Actor.GetALocalPlayerController> 16
+16
+04 0B
+
+//spawn alien Kismet action mutator (tactical layer)
+OBJECT=SeqAct_SpawnAlien.Activated:AUTO
+[REPLACEMENT_CODE]
+//if(!bEnabled)
+07 [@Enabled] 81 2D 01 <@bEnabled> 16
+//return
+04 0B
+[#Enabled]
+//if(class'Engine'.static.GetCurrentWorldInfo().Game.BaseMutator != none)
+07 [@NoMutators] 77 19
+19 12 20 <Engine.Engine> 0A 00 <Engine.Engine.GetCurrentWorldInfo.ReturnValue> 00 1C <Engine.Engine.GetCurrentWorldInfo> 16 09 00 <Engine.WorldInfo.Game> 00 01 <Engine.WorldInfo.Game>
+09 00 <Engine.GameInfo.BaseMutator> 00 01 <Engine.GameInfo.BaseMutator>
+2A 16
+//class'Engine'.static.GetCurrentWorldInfo().Game.BaseMutator.Mutate("SeqAct_SpawnAlien.Activated", class'Engine'.static.GetCurrentWorldInfo().GetALocalPlayerController());
+19 19
+19 12 20 <Engine.Engine> 0A 00 <Engine.Engine.GetCurrentWorldInfo.ReturnValue> 00 1C <Engine.Engine.GetCurrentWorldInfo> 16 09 00 <Engine.WorldInfo.Game> 00 01 <Engine.WorldInfo.Game>
+09 00 <Engine.GameInfo.BaseMutator> 00 01 <Engine.GameInfo.BaseMutator>
+0A 00 <NullRef> 00 1B <Mutate>
+70
+1F <%t "SeqAct_SpawnAlien.Activated:">
+38 57 01 <Core.Object.Name>
+16
+19 12 20 <Engine.Engine> 0A 00 <Engine.Engine.GetCurrentWorldInfo.ReturnValue> 00 1C <Engine.Engine.GetCurrentWorldInfo> 16
+0A 00 <Engine.Actor.GetALocalPlayerController.ReturnValue> 00 1C <Engine.Actor.GetALocalPlayerController> 16
+16
+[#NoMutators]
+//if (!OutputLinks[0].bHasImpulse)
+07 [@Mutated] 81 2D 35 <Engine.SequenceOp.SeqOpOutputLink.bHasImpulse> <Engine.SequenceOp.SeqOpOutputLink> 00 01 10 25 01 <Engine.SequenceOp.OutputLinks> 16
+//SpawnedUnit = none
+0F 01 <@SpawnedUnit> 2A
+//OutputLinks[1].bHasImpulse = false
+14 2D 35 <Engine.SequenceOp.SeqOpOutputLink.bHasImpulse> <Engine.SequenceOp.SeqOpOutputLink> 00 01 10 26 01 <Engine.SequenceOp.OutputLinks> 28
+//m_kDropIn = new class'XGAISpawnMethod_DropIn'
+0F 01 <@m_kDropIn> 11 0B 0B 0B 20 <Class.XGAISpawnMethod_DropIn> 0B
+//m_kDropIn.InitDropIn(iDropHeight, bUseOverwatch, bTriggerOverwatch, bPlaySound, bRevealSpawn, bSpawnImmediately, ForceAlienType, kAdditionalSound, self)
+19 01 <@m_kDropIn> 59 00 <NullRef> 00 1B <InitDropIn> 01 <@iDropHeight> 2D 01 <@bUseOverwatch> 2D 01 <@bTriggerOverwatch> 2D 01 <@bPlaySound> 2D 01 <@bRevealSpawn> 2D 01 <@bSpawnImmediately> 01 <@ForceAlienType> 01 <@kAdditionalSound> 17 4A 16
+//foreach LinkedVariables(class'SeqVar_Object', SpawnObj, "SpawnPoints")
+2F 1C <Engine.SequenceOp.LinkedVariables> 20 <Engine.SeqVar_Object> 00 <.SpawnObj> 1F <%t "SpawnPoints"> 16 [@IP]
+//ThisObj = Actor(SpawnObj.GetObjectValue())
+0F 00 <.ThisObj> 2E <Engine.Actor> 19 00 <.SpawnObj> 0A 00 <Engine.SeqVar_Object.GetObjectValue.ReturnValue> 00 1B <GetObjectValue> 16
+//SpawnPt = XComSpawnPoint_Alien(ThisObj)
+0F 00 <.SpawnPt> 2E <Class.XComSpawnPoint_Alien> 00 <.ThisObj>
+//if(SpawnPt != none)
+07 [@IN] 77 00 <.SpawnPt> 2A 16
+//m_kDropIn.AddSpawnPoint(SpawnPt)
+19 01 <@m_kDropIn> 14 00 <NullRef> 00 1B <AddSpawnPoint> 00 <.SpawnPt> 4A 16
 [#IN]
 31
 [#IP]
 30
-//CacheMods()
-1B <CacheMods> 16
+//if(bSpawnImmediately)
+07 [@NoSpawn] 2D 01 <@bSpawnImmediately>
+//m_kDropIn.CheckContentLoaded()
+19 01 <@m_kDropIn> 0A 00 <NullRef> 00 1B <CheckContentLoaded> 16
+[#NoSpawn]
+//OutputLinks[0].bHasImpulse = true
+14 2D 35 <Engine.SequenceOp.SeqOpOutputLink.bHasImpulse> <Engine.SequenceOp.SeqOpOutputLink> 00 01 10 25 01 <Engine.SequenceOp.OutputLinks> 27
+//ActivateOutputLink(0)
+1C <Engine.SequenceOp.ActivateOutputLink> 25 16
+[#Mutated]
+//return
+04 0B
+//EOS
+53
+
+//load Kismet mutator (tactical layer)
+OBJECT=XGBattle.Loading.NotifyKismetOfLoad:AUTO
+[REPLACEMENT_CODE]
+//if(class'Engine'.static.GetCurrentWorldInfo().Game.BaseMutator != none)
+07 [@NoMutators] 77 19
+19 12 20 <Engine.Engine> 0A 00 <Engine.Engine.GetCurrentWorldInfo.ReturnValue> 00 1C <Engine.Engine.GetCurrentWorldInfo> 16 09 00 <Engine.WorldInfo.Game> 00 01 <Engine.WorldInfo.Game>
+09 00 <Engine.GameInfo.BaseMutator> 00 01 <Engine.GameInfo.BaseMutator>
+2A 16
+//class'Engine'.static.GetCurrentWorldInfo().Game.BaseMutator.Mutate("XGBattle.Loading.NotifyKismetOfLoad", class'Engine'.static.GetCurrentWorldInfo().GetALocalPlayerController());
+19 19
+19 12 20 <Engine.Engine> 0A 00 <Engine.Engine.GetCurrentWorldInfo.ReturnValue> 00 1C <Engine.Engine.GetCurrentWorldInfo> 16 09 00 <Engine.WorldInfo.Game> 00 01 <Engine.WorldInfo.Game>
+09 00 <Engine.GameInfo.BaseMutator> 00 01 <Engine.GameInfo.BaseMutator>
+0A 00 <NullRef> 00 1B <Mutate>
+1F <%t "XGBattle.Loading.NotifyKismetOfLoad">
+19 12 20 <Engine.Engine> 0A 00 <Engine.Engine.GetCurrentWorldInfo.ReturnValue> 00 1C <Engine.Engine.GetCurrentWorldInfo> 16
+0A 00 <Engine.Actor.GetALocalPlayerController.ReturnValue> 00 1C <Engine.Actor.GetALocalPlayerController> 16
+16
+[#NoMutators]
+//WorldInfo.GetGameSequence().FindSeqObjectsByClass(class'SeqEvent_OnKismetDataSerialized', true, Events)
+19 19 01 <Engine.Actor.WorldInfo>
+0A 00 <Engine.WorldInfo.GetGameSequence.ReturnValue> 00 1C <Engine.WorldInfo.GetGameSequence> 16
+1D 00 <NullRef> 00 1C <Engine.Sequence.FindSeqObjectsByClass>
+20 <Class.SeqEvent_OnKismetDataSerialized> 27 00 <.Events> 16
+//Idx = 0
+0F 00 <.Idx> 25
+[#loop1]
+//if(Idx < Events.Length)
+07 [@loop1end] 96 00 <.Idx> 36 00 <.Events> 16
+//NotifyKismetEvent = SeqEvent_OnKismetDataSerialized(Events[Idx])
+0F 00 <.NotifyKismetEvent> 2E <Class.SeqEvent_OnKismetDataSerialized>
+10 00 <.Idx> 00 <.Events>
+//NotifyKismetEvent.CheckActivate(self, self)
+19 00 <.NotifyKismetEvent>
+0F 00 <Engine.SequenceEvent.CheckActivate.ReturnValue> 00 1C <Engine.SequenceEvent.CheckActivate>
+17 17 4A 4A 4A 16
+//++ Idx
+A5 00 <.Idx> 16
+//goto loop1
+06 [@loop1]
+[#loop1end]
+//return
+04 0B
+//EOS
+53
+
+//AI behavior mutator (tactical layer)
+OBJECT=XGPlayer.InitBehavior:AUTO
+[REPLACEMENT_CODE]
+//if(kUnit.m_kBehavior == none)
+07 [@LoadInit] 72 19 00 <.kUnit> 09 00 <XGUnitNativeBase.m_kBehavior> 00 01 <XGUnitNativeBase.m_kBehavior> 2A 16
+//if(class'Engine'.static.GetCurrentWorldInfo().Game.BaseMutator != none)
+07 [@NoMutators] 77 19
+19 12 20 <Engine.Engine> 0A 00 <Engine.Engine.GetCurrentWorldInfo.ReturnValue> 00 1C <Engine.Engine.GetCurrentWorldInfo> 16 09 00 <Engine.WorldInfo.Game> 00 01 <Engine.WorldInfo.Game>
+09 00 <Engine.GameInfo.BaseMutator> 00 01 <Engine.GameInfo.BaseMutator>
+2A 16
+//class'Engine'.static.GetCurrentWorldInfo().Game.BaseMutator.Mutate("XGPlayer.InitBehavior", class'Engine'.static.GetCurrentWorldInfo().GetALocalPlayerController());
+19 19
+19 12 20 <Engine.Engine> 0A 00 <Engine.Engine.GetCurrentWorldInfo.ReturnValue> 00 1C <Engine.Engine.GetCurrentWorldInfo> 16 09 00 <Engine.WorldInfo.Game> 00 01 <Engine.WorldInfo.Game>
+09 00 <Engine.GameInfo.BaseMutator> 00 01 <Engine.GameInfo.BaseMutator>
+0A 00 <NullRef> 00 1B <Mutate>
+70
+1F <%t "XGPlayer.InitBehavior:">
+38 56 00 <.kUnit>
+16
+19 12 20 <Engine.Engine> 0A 00 <Engine.Engine.GetCurrentWorldInfo.ReturnValue> 00 1C <Engine.Engine.GetCurrentWorldInfo> 16
+0A 00 <Engine.Actor.GetALocalPlayerController.ReturnValue> 00 1C <Engine.Actor.GetALocalPlayerController> 16
+16
+[#NoMutators]
+//if(kUnit.m_kBehavior == none)
+07 [@NormalSpawn] 72 19 00 <.kUnit> 09 00 <XGUnitNativeBase.m_kBehavior> 00 01 <XGUnitNativeBase.m_kBehavior> 2A 16
+//kUnit.m_kBehavior = Spawn(GetBehaviorClass(kUnit.GetCharacter().m_eType))
+0F 19 00 <.kUnit> 09 00 <XGUnitNativeBase.m_kBehavior> 00 01 <XGUnitNativeBase.m_kBehavior>
+1C <Engine.Actor.Spawn> 1B <GetBehaviorClass> 19 19 00 <.kUnit> 0A 00 <XGUnit.GetCharacter.ReturnValue> 00 1B <GetCharacter> 16 09 00 <XGCharacter.m_eType> 00 01 <XGCharacter.m_eType> 16 4A 4A 4A 4A 4A 4A 4A 16
+[#NormalSpawn]
+//kUnit.m_kBehavior.Init(kUnit)
+19 19 00 <.kUnit> 09 00 <XGUnitNativeBase.m_kBehavior> 00 01 <XGUnitNativeBase.m_kBehavior> 13 00 <NullRef> 00 1B <Init> 00 <.kUnit> 16
+//kUnit.m_kBehavior.SetBehavior(none)
+19 19 00 <.kUnit> 09 00 <XGUnitNativeBase.m_kBehavior> 00 01 <XGUnitNativeBase.m_kBehavior> 13 00 <NullRef> 00 1B <SetBehavior> 2A 16
+//goto return
+06 [@Return]
+[#LoadInit]
+//kUnit.m_kBehavior.LoadInit(kUnit)
+19 19 00 <.kUnit> 09 00 <XGUnitNativeBase.m_kBehavior> 00 01 <XGUnitNativeBase.m_kBehavior> 13 00 <NullRef> 00 1B <LoadInit> 00 <.kUnit> 16
+[#Return]
+//return
+04 0B
+//EOS
+53
+
+UPK_FILE=XComStrategyGame.upk
+
+//add "Mutate" function name to name table
+[ADD_NAME_ENTRY]
+<%u 7>							// Length
+<%t "Mutate">					// Name
+<%u 0x00000000>					// flags L
+<%u 0x00070010>					// flags H
+
+//mutate strategy AI class
+OBJECT=XGStrategy.NewGame:AUTO
+[REPLACEMENT_CODE]
+//if(class'Engine'.static.GetCurrentWorldInfo().Game.BaseMutator != none)
+07 [@NoMutators] 77 19
+19 12 20 <Engine.Engine> 0A 00 <Engine.Engine.GetCurrentWorldInfo.ReturnValue> 00 1C <Engine.Engine.GetCurrentWorldInfo> 16 09 00 <Engine.WorldInfo.Game> 00 01 <Engine.WorldInfo.Game>
+09 00 <Engine.GameInfo.BaseMutator> 00 01 <Engine.GameInfo.BaseMutator>
+2A 16
+//class'Engine'.static.GetCurrentWorldInfo().Game.BaseMutator.Mutate("XGStrategy.NewGame", class'Engine'.static.GetCurrentWorldInfo().GetALocalPlayerController());
+19 19
+19 12 20 <Engine.Engine> 0A 00 <Engine.Engine.GetCurrentWorldInfo.ReturnValue> 00 1C <Engine.Engine.GetCurrentWorldInfo> 16 09 00 <Engine.WorldInfo.Game> 00 01 <Engine.WorldInfo.Game>
+09 00 <Engine.GameInfo.BaseMutator> 00 01 <Engine.GameInfo.BaseMutator>
+0A 00 <NullRef> 00 1B <Mutate>
+1F <%t "XGStrategy.NewGame">
+19 12 20 <Engine.Engine> 0A 00 <Engine.Engine.GetCurrentWorldInfo.ReturnValue> 00 1C <Engine.Engine.GetCurrentWorldInfo> 16
+0A 00 <Engine.Actor.GetALocalPlayerController.ReturnValue> 00 1C <Engine.Actor.GetALocalPlayerController> 16
+16
+[#NoMutators]
+//if (m_kWorld == None) // if not created by mutator
+07 [@WorldSpawned] 72 01 <@m_kWorld> 2A 16
+//m_kWorld = Spawn(class'XGWorld')
+0F 01 <@m_kWorld> 1C <Engine.Actor.Spawn> 20 <Class.XGWorld> 4A 4A 4A 4A 4A 4A 4A 16
+[#WorldSpawned]
+//if (m_kGeoscape == None) // if not created by mutator
+07 [@GeoscapeSpawned] 72 01 <@m_kGeoscape> 2A 16
+//m_kGeoscape = Spawn(class'XGGeoscape')
+0F 01 <@m_kGeoscape> 1C <Engine.Actor.Spawn> 20 <Class.XGGeoscape> 4A 4A 4A 4A 4A 4A 4A 16
+[#GeoscapeSpawned]
+//if (m_kHQ == None) // if not created by mutator
+07 [@HQSpawned] 72 01 <@m_kHQ> 2A 16
+//m_kHQ = Spawn(class'XGHeadQuarters')
+0F 01 <@m_kHQ> 1C <Engine.Actor.Spawn> 20 <Class.XGHeadQuarters> 4A 4A 4A 4A 4A 4A 4A 16
+[#HQSpawned]
+//if (m_kAI == None) // if not created by mutator
+07 [@AISpawned] 72 01 <@m_kAI> 2A 16
+//m_kAI = Spawn(class'XGStrategyAI')
+0F 01 <@m_kAI> 1C <Engine.Actor.Spawn> 20 <Class.XGStrategyAI> 4A 4A 4A 4A 4A 4A 4A 16
+[#AISpawned]
+//m_kRecapSaveData = Spawn(class'XGRecapSaveData')
+0F 01 <@m_kRecapSaveData> 1C <Engine.Actor.Spawn> 20 <XComGame.XGRecapSaveData> 4A 4A 4A 4A 4A 4A 4A 16
+//if (m_kExaltSimulation == None) // if not created by mutator
+07 [@EXALTSpawned] 72 01 <@m_kExaltSimulation> 2A 16
+//m_kExaltSimulation = Spawn(class'XGExaltSimulation')
+0F 01 <@m_kExaltSimulation> 1C <Engine.Actor.Spawn> 20 <Class.XGExaltSimulation> 4A 4A 4A 4A 4A 4A 4A 16
+[#EXALTSpawned]
+//m_arrMissionTotals.Add(22)
+54 01 <@m_arrMissionTotals> 2C 16 16
+//if (m_kNarrative == None) // if not created by mutator
+07 [@NarrativeSpawned] 72 01 <@m_kNarrative> 2A 16
+//m_kNarrative = Spawn(class'XGNarrative')
+0F 01 <@m_kNarrative> 1C <Engine.Actor.Spawn> 20 <XComGame.XGNarrative> 4A 4A 4A 4A 4A 4A 4A 16
+//m_kNarrative.InitNarrative(XComHeadquartersGame(WorldInfo.Game).m_bSuppressFirstTimeNarrative)
+19 01 <@m_kNarrative> 47 00 <NullRef> 00 1B <InitNarrative>
+19 2E <Class.XComHeadquartersGame>
+19 01 <Engine.Actor.WorldInfo> 09 00 <Engine.WorldInfo.Game> 00 01 <Engine.WorldInfo.Game>
+0A 00 <XComHeadquartersGame.m_bSuppressFirstTimeNarrative> 00 2D 01 <XComHeadquartersGame.m_bSuppressFirstTimeNarrative> 16
+[#NarrativeSpawned]
+//m_arrItemUnlocks.Add(226)
+54 01 <@m_arrItemUnlocks> 2C E2 16
+//m_arrGeneModUnlocks.Add(11)
+54 01 <@m_arrGeneModUnlocks> 2C 0B 16
+//m_arrFacilityUnlocks.Add(24)
+54 01 <@m_arrFacilityUnlocks> 2C 18 16
+//m_arrFoundryUnlocks.Add(25)
+54 01 <@m_arrFoundryUnlocks> 2C 19 16
+//m_arrSecondWave.Add(21)
+54 01 <@m_arrSecondWave> 2C 15 16
+//Init(false)
+1B <Init> 28 16
+//GotoState('Initing')
+71 21 <Initing> 4A 4A 4A 16
+//return
+04 0B
+//EOS
+53

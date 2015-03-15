@@ -1,8 +1,7 @@
 XCOM-Mutators: UPK Patches
 ==========================
 
-Patches for game packages (Engine, XComGame, XComStrategyGame) to allow mutators modify certain
-aspects of the game.
+These patches allow mutators to be activated within certain game events.
 
 Install with PatchUPK/PatcherGUI: http://www.nexusmods.com/xcom/mods/448
 
@@ -24,3 +23,7 @@ General rules for inserting a Mutator call:
 2. Try to replace an entire class with its subclass, if you can and if this suits your goals.
 
 3. If not - try to modify an existing function as little as possible.
+
+XComMutatorEnabler.txt contains all the patches necessary to enable mutators.
+
+ModifyActorProperties.txt contains patches to allow static map objects modification by scripting.

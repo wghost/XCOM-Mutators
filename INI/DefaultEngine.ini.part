@@ -3,3 +3,4 @@
 +NativePackages=XComStrategyGame
 +NonNativePackages=XComUIShell
 +NonNativePackages=XComMutator
++NonNativePackages=XComLZMutator

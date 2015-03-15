@@ -1,0 +1,213 @@
+UPK_FILE=Engine.upk
+
+//allow to delete and re-spawn TriggerVolume objects
+OBJECT=Default__TriggerVolume:AUTO
+[BEFORE_CODE]
+<Class.SeqEvent_Touch>
+<Class.SeqEvent_TakeDamage>
+<None>
+[AFTER_CODE]
+<Class.SeqEvent_Touch>
+<Class.SeqEvent_TakeDamage>
+<bNoDelete>
+<BoolProperty>
+<%u 0x00000000>
+<%u 0x00000000>
+<%b 0x00>
+<bStatic>
+<BoolProperty>
+<%u 0x00000000>
+<%u 0x00000000>
+<%b 0x00>
+<None>
+
+//allow to delete and re-spawn PlayerStart objects
+OBJECT=Default__PlayerStart:AUTO
+[BEFORE_CODE]
+<CollisionComponent>
+<ObjectProperty>
+<%u 0x00000004>
+<%u 0x00000000>
+<Default__PlayerStart.CollisionCylinder>
+[AFTER_CODE]
+<CollisionComponent>
+<ObjectProperty>
+<%u 0x00000004>
+<%u 0x00000000>
+<Default__PlayerStart.CollisionCylinder>
+<bStatic>
+<BoolProperty>
+<%u 0x00000000>
+<%u 0x00000000>
+<%b 0x00>
+<bNoDelete>
+<BoolProperty>
+<%u 0x00000000>
+<%u 0x00000000>
+<%b 0x00>
+
+//allow to delete and re-spawn Emitter objects
+OBJECT=Default__Emitter
+[FIND_CODE]
+<bNoDelete>
+<BoolProperty>
+<%u 0x00000000>
+<%u 0x00000000>
+<%b 0x01>
+[MODDED_CODE]
+<bNoDelete>
+<BoolProperty>
+<%u 0x00000000>
+<%u 0x00000000>
+<%b 0x00>
+
+//allow to delete and re-spawn AmbientSoundSimpleToggleable objects
+OBJECT=Default__AmbientSoundSimpleToggleable
+[FIND_CODE]
+<bNoDelete>
+<BoolProperty>
+<%u 0x00000000>
+<%u 0x00000000>
+<%b 0x01>
+[MODDED_CODE]
+<bNoDelete>
+<BoolProperty>
+<%u 0x00000000>
+<%u 0x00000000>
+<%b 0x00>
+
+UPK_FILE=XComGame.upk
+
+//allow to delete and re-spawn XComLevelActor objects
+//make XComLevelActor objects movable by script (i.e. allow to set new coordinates by script)
+OBJECT=Default__XComLevelActor:AUTO
+[BEFORE_CODE]
+<bStatic>
+<BoolProperty>
+<%u 0x00000000>
+<%u 0x00000000>
+<%b 0x00>
+<bStaticCollision>
+<BoolProperty>
+<%u 0x00000000>
+<%u 0x00000000>
+<%b 0x01>
+<bTickIsDisabled>
+<BoolProperty>
+[AFTER_CODE]
+<bStatic>
+<BoolProperty>
+<%u 0x00000000>
+<%u 0x00000000>
+<%b 0x00>
+<bMovable>
+<BoolProperty>
+<%u 0x00000000>
+<%u 0x00000000>
+<%b 0x01>
+<bStaticCollision>
+<BoolProperty>
+<%u 0x00000000>
+<%u 0x00000000>
+<%b 0x01>
+<bTickIsDisabled>
+<BoolProperty>
+
+//allow to delete and re-spawn PointInSpace objects
+OBJECT=Default__PointInSpace
+[FIND_CODE]
+<bStatic>
+<BoolProperty>
+<%u 0x00000000>
+<%u 0x00000000>
+<%b 0x01>
+<bNoDelete>
+<BoolProperty>
+<%u 0x00000000>
+<%u 0x00000000>
+<%b 0x01>
+[MODDED_CODE]
+<bStatic>
+<BoolProperty>
+<%u 0x00000000>
+<%u 0x00000000>
+<%b 0x00>
+<bNoDelete>
+<BoolProperty>
+<%u 0x00000000>
+<%u 0x00000000>
+<%b 0x00>
+
+//allow to delete and re-spawn XComBuildingVolume objects
+OBJECT=Default__XComBuildingVolume:AUTO
+[BEFORE_CODE]
+<CollisionComponent>
+<ObjectProperty>
+<%u 0x00000004>
+<%u 0x00000000>
+<Default__XComBuildingVolume.BrushComponent0>
+[AFTER_CODE]
+<CollisionComponent>
+<ObjectProperty>
+<%u 0x00000004>
+<%u 0x00000000>
+<Default__XComBuildingVolume.BrushComponent0>
+<bStatic>
+<BoolProperty>
+<%u 0x00000000>
+<%u 0x00000000>
+<%b 0x00>
+<bNoDelete>
+<BoolProperty>
+<%u 0x00000000>
+<%u 0x00000000>
+<%b 0x00>
+
+//allow to delete and re-spawn XComRebuildWorldDataVolume objects
+OBJECT=Default__XComRebuildWorldDataVolume:AUTO
+[BEFORE_CODE]
+<CollisionComponent>
+<ObjectProperty>
+<%u 0x00000004>
+<%u 0x00000000>
+<Default__XComRebuildWorldDataVolume.BrushComponent0>
+<None>
+[AFTER_CODE]
+<CollisionComponent>
+<ObjectProperty>
+<%u 0x00000004>
+<%u 0x00000000>
+<Default__XComRebuildWorldDataVolume.BrushComponent0>
+<bStatic>
+<BoolProperty>
+<%u 0x00000000>
+<%u 0x00000000>
+<%b 0x00>
+<bNoDelete>
+<BoolProperty>
+<%u 0x00000000>
+<%u 0x00000000>
+<%b 0x00>
+<None>
+
+//allow to delete and re-spawn XComSquadVisiblePoint objects
+OBJECT=Default__XComSquadVisiblePoint:AUTO
+[BEFORE_CODE]
+<bNoDelete>
+<BoolProperty>
+<%u 0x00000000>
+<%u 0x00000000>
+<%b 0x01>
+<None>
+[AFTER_CODE]
+<bNoDelete>
+<BoolProperty>
+<%u 0x00000000>
+<%u 0x00000000>
+<%b 0x00>
+<bStatic>
+<BoolProperty>
+<%u 0x00000000>
+<%u 0x00000000>
+<%b 0x00>
+<None>
