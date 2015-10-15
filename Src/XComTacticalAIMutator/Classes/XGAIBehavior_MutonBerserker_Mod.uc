@@ -40,13 +40,13 @@ simulated function PostBuildAbilities()
 
 simulated function int GetPredeterminedAbility()
 {
-    if(m_bBullRushActive)
-    {
-        return 55;
-    }
     if(IsInMeleeRange())
     {
         return 7;
+    }
+    if(m_bBullRushActive)
+    {
+        return 55;
     }
     return 1;
 }

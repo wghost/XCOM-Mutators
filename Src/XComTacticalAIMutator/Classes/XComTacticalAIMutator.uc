@@ -33,6 +33,8 @@ function class<XGAIBehavior> GetModifiedBehaviorClass(XGGameData.EPawnType eAlie
 	{
 		case ePawnType_Muton_Berserker:
 			return class'XGAIBehavior_MutonBerserker_Mod';
+		case ePawnType_Sectoid:
+			return class'XGAIBehavior_Sectoid_Mod';
 	}
 
 	return none;
